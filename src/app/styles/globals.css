@@ -1,0 +1,153 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+html,
+body,
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+:root {
+  --backgroundColor: #9a9494;
+  --primaryColor: #0aa1ff;
+  --primaryTextColor: #e6e6e6;
+
+  --headlineBig: clamp(5rem, 9.9vw, 15rem);
+  --headlineMedium: clamp(1rem, 2vw, 4rem);
+  --headlineSmall: clamp(0.6rem, 0.75vw, 1.3rem);
+  --spacing: clamp(0.9rem, 0.75vw, 1.3rem);
+}
+
+body {
+  background-color: var(--backgroundColor);
+}
+
+.hero__header {
+  height: 100vh;
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.hero__header h1 {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: var(--headlineBig);
+  color: var(--primaryTextColor);
+}
+
+.hero__header h2 {
+  letter-spacing: var(--headlineSmall);
+  font-size: var(--headlineSmall);
+  text-transform: uppercase;
+  color: var(--primaryColor);
+}
+
+.scroll-section-outer {
+  overflow: hidden;
+}
+
+.scroll-section-inner {
+  height: 100vh;
+  width: 400vw;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.scroll-section {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.scroll-section h3 {
+  color: var(--primaryTextColor);
+  letter-spacing: var(--headlineMedium);
+  font-size: var(--headlineMedium);
+  text-transform: uppercase;
+}
+
+.footer {
+  height: 20vh; /* Or any smaller value instead of 100vh */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* styles/globals.css or your preferred CSS file */
+
+.bg-primary {
+  background-color: #ff6347; /* Example primary color */
+}
+
+.bg-transparent {
+  background-color: transparent; /* Make the background transparent on scroll */
+}
+
+.text-black {
+  color: black; /* Change text color to black on scroll */
+}
+
+.text-white {
+  color: white; /* Keep text color white by default */
+}
+
+.bg-secondary {
+  background-color: #ffa07a; /* Example secondary color for hover effects */
+}
+
+.fixed {
+  position: fixed;
+  width: 100%; /* Ensure it spans full width */
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+.container {
+  max-width: 1200px; /* Adjust according to your design */
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column; /* Stack items vertically on mobile */
+    align-items: flex-start; /* Align items to the start */
+  }
+
+  .flex {
+    flex-direction: column; /* Stack links vertically on mobile */
+    align-items: flex-start; /* Align links to the start */
+  }
+
+  .space-x-4 > * {
+    margin-bottom: 0.5rem; /* Add margin between links on mobile */
+  }
+}
+/* styles/globals.css or a specific CSS file for VideoBlast */
+
+.blast {
+  animation: blastAnimation 1s forwards;
+}
+
+@keyframes blastAnimation {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
