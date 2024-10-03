@@ -24,6 +24,8 @@ const AreaFood = ({ cuisine }) => {
     "/images/background-5.jpg",
   ];
 
+  const isMobile = typeof window !== "undefined" && window.innerWidth <= 768; // Check if the device is mobile
+
   useEffect(() => {
     const fetchBestFoods = async () => {
       const foodData = [];
@@ -44,38 +46,38 @@ const AreaFood = ({ cuisine }) => {
 
     fetchBestFoods(); // Call the fetch function
 
-    const pin = gsap.fromTo(
-      sectionRef.current,
-      { translateX: 0 },
-      {
-        translateX: "-300vw",
-        ease: "power2.inOut",
-        duration: 2,
-        scrollTrigger: {
-          trigger: triggerRef.current,
-          start: "top top",
-          end: "+=5000",
-          scrub: 0.5,
-          pin: true,
-          pinSpacing: true,
-        },
-      }
-    );
+    if (!isMobile) {
+      const pin = gsap.fromTo(
+        sectionRef.current,
+        { translateX: 0 },
+        {
+          translateX: "-300vw",
+          ease: "power2.inOut",
+          duration: 2,
+          scrollTrigger: {
+            trigger: triggerRef.current,
+            start: "top top",
+            end: "+=5000",
+            scrub: 0.5,
+            pin: true,
+            pinSpacing: true,
+          },
+        }
+      );
 
-    return () => pin.kill();
-  }, [cuisine]);
+      return () => pin.kill();
+    }
+  }, [cuisine, isMobile]); // Add isMobile to dependencies
 
   const handleMealClick = (idMeal) => {
     router.push(`/recipes/${idMeal}`);
   };
 
   return (
-    <div className="relative w-screen h-screen">
-      <h2 className="text-secondary text-xl font-bold mb-4 text-center absolute top-4 left-0 right-0 z-50">
-        Best Foods for {cuisine}
-      </h2>
-      <div ref={triggerRef} className="w-screen h-[100vh]">
-        <div ref={sectionRef} className="flex h-[100vh] w-[500vw]">
+    <div className="relative w-screen h-screen overflow-x-hidden"> {/* Added overflow-x-hidden */}
+     
+      <div ref={triggerRef} className="w-screen h-[100vh] overflow-x-auto"> {/* Added overflow-x-auto for horizontal scrolling */}
+        <div ref={sectionRef} className={`flex ${isMobile ? 'flex-col' : 'h-[100vh] w-[500vw]'}`}>
           {loading ? ( // Show loading state
             <p className="text-lg">Loading...</p>
           ) : bestFoods.length > 0 ? (
@@ -85,7 +87,7 @@ const AreaFood = ({ cuisine }) => {
               return (
                 <div
                   key={food.idMeal}
-                  className="w-screen h-screen flex items-center justify-center relative"
+                  className="w-screen h-screen flex items-center justify-center relative flex-shrink-0" // Added flex-shrink-0 to prevent shrinking
                   style={{
                     backgroundImage: `url(${backgroundImage})`,
                     backgroundSize: "cover",

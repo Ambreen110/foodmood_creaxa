@@ -1,5 +1,3 @@
-// components/VideoBlast.js
-
 'use client';
 
 import React, { useState } from 'react';
@@ -28,6 +26,7 @@ const VideoBlast = ({ onVideoEnd }) => {
         onClick={handleVideoClick} // Click handler for navigation
         onEnded={handleVideoClick} // Also handle video end event
       />
+      {/* Optionally, you could add styles or overlays here if needed */}
     </div>
   );
 };
