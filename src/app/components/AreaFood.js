@@ -16,14 +16,6 @@ const AreaFood = ({ cuisine }) => {
 
   gsap.registerPlugin(ScrollTrigger);
 
-  const backgrounds = [
-    "/images/background.jpg",
-    "/images/background-2.jpg",
-    "/images/background-3.jpg",
-    "/images/background-4.jpg",
-    "/images/background-5.jpg",
-  ];
-
   useEffect(() => {
     const fetchBestFoods = async () => {
       const foodData = [];
@@ -44,80 +36,87 @@ const AreaFood = ({ cuisine }) => {
 
     fetchBestFoods(); // Call the fetch function
 
-    const pin = gsap.fromTo(
-      sectionRef.current,
-      { translateX: 0 },
-      {
-        translateX: "-300vw",
-        ease: "power2.inOut",
-        duration: 2,
-        scrollTrigger: {
-          trigger: triggerRef.current,
-          start: "top top",
-          end: "+=5000",
-          scrub: 0.5,
-          pin: true,
-          pinSpacing: true,
-        },
-      }
-    );
+    // Only apply horizontal scroll animations on desktop
+    const viewportWidth = window.innerWidth;
 
-    return () => pin.kill();
+    if (viewportWidth > 768) {
+      const pin = gsap.fromTo(
+        sectionRef.current,
+        { translateX: 0 },
+        {
+          translateX: "-300vw", // Horizontal scroll for larger screens
+          ease: "power2.inOut",
+          duration: 2,
+          scrollTrigger: {
+            trigger: triggerRef.current,
+            start: "top top",
+            end: "+=2000",
+            scrub: 1,
+            pin: true,
+            pinSpacing: true,
+          },
+        }
+      );
+
+      return () => pin.kill();
+    }
   }, [cuisine]);
 
   const handleMealClick = (idMeal) => {
     router.push(`/recipes/${idMeal}`);
   };
 
+  // Array of gradient backgrounds for each food card
+  const gradientBackgrounds = [
+    "bg-gradient-to-r from-orange-400 to-blue-500",
+    "bg-gradient-to-r from-purple-400 to-pink-500",
+    "bg-gradient-to-r from-green-400 to-yellow-500",
+    "bg-gradient-to-r from-blue-400 to-indigo-500",
+  ];
+
   return (
-    <div className="relative w-screen h-screen">
-     
+    <div className="relative w-screen h-screen bg-gray-100">
       <div ref={triggerRef} className="w-screen h-[100vh]">
-        <div ref={sectionRef} className="flex h-[100vh] w-[500vw]">
+        {/* Container for large screens */}
+        <div
+          ref={sectionRef}
+          className="flex lg:h-[100vh] lg:w-[500vw] lg:flex-row flex-col h-auto"
+        >
           {loading ? ( // Show loading state
             <p className="text-lg">Loading...</p>
           ) : bestFoods.length > 0 ? (
-            bestFoods.map((food, index) => {
-              const backgroundImage = backgrounds[index % backgrounds.length]; // Cycle through background images
-
-              return (
+            bestFoods.map((food, index) => (
+              <div
+                key={food.idMeal}
+                className={`w-screen h-screen flex items-center justify-center relative lg:w-screen lg:h-screen py-10 ${gradientBackgrounds[index % gradientBackgrounds.length]}`} // Apply unique gradient background
+              >
                 <div
-                  key={food.idMeal}
-                  className="w-screen h-screen flex items-center justify-center relative"
-                  style={{
-                    backgroundImage: `url(${backgroundImage})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
+                  onClick={() => handleMealClick(food.idMeal)}
+                  className="block w-full h-full cursor-pointer group"
                 >
-                  <div
-                    onClick={() => handleMealClick(food.idMeal)}
-                    className="block w-full h-full cursor-pointer"
-                  >
-                    <BackgroundGradient className="absolute inset-0 z-10 flex flex-col items-center justify-center h-full w-full">
-                      <h3 className="text-lg font-semibold mt-52 text-center text-orange-500 bg-black bg-opacity-50 p-2 rounded-lg">
-                        {food.strMeal}
-                      </h3>
-                    </BackgroundGradient>
-                    <div className="absolute inset-0 flex items-center justify-center"> 
-                      <Image
-                        src={food.strMealThumb}
-                        alt={food.strMeal}
-                        height={300} 
-                        width={300} 
-                        style={{
-                          objectFit: "cover",
-                          borderRadius: "50%", // Makes the image round
-                          border: "4px solid white", // Optional: Add white border to the image
-                        }}
-                        className="transition-opacity duration-500 ease-in-out"
-                        priority
-                      />
-                    </div>
+                  <BackgroundGradient className="absolute inset-0 z-10 flex flex-col items-center justify-center h-full w-full">
+                    <h3 className="text-lg font-semibold mt-52 text-center text-orange-500 bg-black bg-opacity-50 p-2 rounded-lg transition duration-500 ease-in-out group-hover:scale-110 group-hover:text-yellow-400">
+                      {food.strMeal}
+                    </h3>
+                  </BackgroundGradient>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Image
+                      src={food.strMealThumb}
+                      alt={food.strMeal}
+                      height={250} // Medium size image
+                      width={250} // Medium size image
+                      style={{
+                        objectFit: "cover",
+                        borderRadius: "50%", // Makes the image round
+                        border: "4px solid white", // Optional: Add white border to the image
+                      }}
+                      className="transition-transform duration-700 ease-in-out group-hover:rotate-6 group-hover:scale-125 transform"
+                      priority
+                    />
                   </div>
                 </div>
-              );
-            })
+              </div>
+            ))
           ) : (
             <p>No best foods found for {cuisine || "this cuisine"}.</p>
           )}

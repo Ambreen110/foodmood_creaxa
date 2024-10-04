@@ -9,7 +9,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleScroll = () => {
-    setIsScrolled(window.scrollY > 50);
+    setIsScrolled(window.scrollY > 50); // Set true if scrolled more than 50 pixels
   };
 
   useEffect(() => {
@@ -33,10 +33,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 p-4 transition-all duration-300 ${isScrolled ? 'bg-gray-800' : 'bg-transparent'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 p-4 transition-all duration-300 ${isScrolled ? 'bg-gray-500 shadow-lg' : 'bg-gray-500'}`}>
       <div className="container mx-auto flex justify-between items-center">
         <h1 
-          className="text-xl font-bold cursor-pointer transition-colors duration-300 text-orange-500" 
+          className="text-xl font-bold cursor-pointer transition-colors duration-300 text-orange-500 hover:text-orange-300" 
           onClick={() => router.push('/')}
         >
           FoodMood
@@ -76,16 +76,18 @@ const Navbar = () => {
         </div>
       </div>
 
-      <div className={`md:hidden ${isOpen ? 'block' : 'hidden'} transition-all duration-300`}>
-        {cuisines.map((cuisine) => (
-          <button 
-            key={cuisine.name} 
-            onClick={() => handleCuisineClick(cuisine.name)} 
-            className={`block py-2 px-4 bg-transparent text-orange-500 font-bold transition-colors duration-300 hover:text-orange-300`}
-          >
-            {cuisine.name}
-          </button>
-        ))}
+      <div className={`md:hidden ${isOpen ? 'block' : 'hidden'} transition-all duration-300 bg-gray-800 bg-opacity-90 rounded-lg shadow-lg`}>
+        <div className="flex flex-col items-center py-4">
+          {cuisines.map((cuisine) => (
+            <button 
+              key={cuisine.name} 
+              onClick={() => handleCuisineClick(cuisine.name)} 
+              className={`block py-2 px-4 w-full text-left text-orange-500 font-bold transition-colors duration-300 hover:text-orange-300`}
+            >
+              {cuisine.name}
+            </button>
+          ))}
+        </div>
       </div>
     </nav>
   );

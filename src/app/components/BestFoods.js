@@ -1,31 +1,17 @@
-'use client'; // Ensure this is at the top of the file
+'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
-import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
+import { motion } from 'framer-motion'; // Import motion from framer-motion
 import { BackgroundGradient } from './ui/background-gradient';
 import { useRouter } from 'next/navigation'; // Import useRouter
 
 const cuisines = ['Indian', 'American', 'Chinese', 'Italian', 'Mexican'];
 
-const backgrounds = [
-  '/images/background.jpg',
-  '/images/background-2.jpg',
-  '/images/background-3.jpg',
-  '/images/background-4.jpg',
-  '/images/background-5.jpg',
-]; // Array of background images
-
 const BestFoods = () => {
   const [foods, setFoods] = useState({});
   const [loading, setLoading] = useState(true); // State for loading
-  const sectionRef = useRef(null); // For GSAP animation
-  const triggerRef = useRef(null); // For GSAP scroll trigger
   const router = useRouter(); // Initialize useRouter
-
-  gsap.registerPlugin(ScrollTrigger);
 
   useEffect(() => {
     const fetchBestFoods = async () => {
@@ -48,26 +34,6 @@ const BestFoods = () => {
     };
 
     fetchBestFoods();
-
-    const pin = gsap.fromTo(
-      sectionRef.current,
-      { translateX: 0 },
-      {
-        translateX: '-300vw',
-        ease: 'power2.inOut',
-        duration: 2,
-        scrollTrigger: {
-          trigger: triggerRef.current,
-          start: 'top top',
-          end: '+=5000',
-          scrub: 0.5,
-          pin: true,
-          pinSpacing: true,
-        },
-      }
-    );
-
-    return () => pin.kill(); // Cleanup on component unmount
   }, []);
 
   const handleRecipeClick = (idMeal) => {
@@ -75,62 +41,84 @@ const BestFoods = () => {
   };
 
   return (
-    <div className="relative w-screen h-screen">
-      {/* Background styles applied directly to each section */}
-      <h2 className="text-secondary text-xl font-bold mb-4 text-center absolute top-4 left-0 right-0 z-50">
+    <div className="relative w-screen min-h-screen bg-gray-100 overflow-y-scroll">
+      <h2 className="text-secondary text-3xl font-bold mb-4 text-center pt-8 z-50">
         Best Foods
       </h2>
 
-      <div ref={triggerRef} className="w-screen h-[100vh]">
-        <div ref={sectionRef} className="flex h-[100vh] w-[500vw]">
-          {cuisines.map((cuisine, index) => {
-            const cuisineFoods = foods[cuisine] || [];
-            const randomFood = cuisineFoods[Math.floor(Math.random() * cuisineFoods.length)];
-            const backgroundImage = backgrounds[index]; // Assign the corresponding background
+      <div className="flex flex-col">
+        {cuisines.map((cuisine, index) => {
+          const cuisineFoods = foods[cuisine] || [];
+          const randomFood = cuisineFoods[Math.floor(Math.random() * cuisineFoods.length)];
 
-            return (
-              <div
-                key={cuisine}
-                className="w-screen h-screen flex items-center justify-center relative"
-                style={{
-                  backgroundImage: `url(${backgroundImage})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  backgroundAttachment: 'fixed', // Background moves with the content
-                }}
-              >
-                {loading ? ( // Show loading state
-                  <p className="text-lg">Loading...</p>
-                ) : randomFood ? (
-                  <div onClick={() => handleRecipeClick(randomFood.idMeal)} className="block w-full h-full cursor-pointer">
-                    <BackgroundGradient className="absolute inset-0 z-10 flex flex-col items-center justify-center h-full w-full">
-                      <h3 className="text-lg font-semibold mt-52 text-center text-orange-500 bg-black bg-opacity-50 p-2 rounded-lg">
-                        {randomFood.strMeal} ({cuisine})
+          return (
+            <motion.div
+              key={cuisine}
+              className="relative w-full h-screen flex items-center justify-center"
+              initial={{ opacity: 0, y: 50 }} // Start with initial opacity and y position
+              animate={{ opacity: 1, y: 0 }} // Animate to full opacity and y position
+              exit={{ opacity: 0, y: -50 }} // Fade out on exit
+              transition={{ duration: 0.5 }} // Smooth transition
+            >
+              {loading ? ( // Show loading state
+                <p className="text-lg">Loading...</p>
+              ) : randomFood ? (
+                <motion.div
+                  className={`w-full h-full cursor-pointer flex flex-col-reverse lg:flex-row ${
+                    index % 2 === 0 ? 'flex-row-reverse' : ''
+                  }`}
+                  onClick={() => handleRecipeClick(randomFood.idMeal)} // Click to view recipe
+                  initial={{ scale: 0, rotate: -10 }} // Initial scale and rotation for popup
+                  animate={{ scale: 1, rotate: 0 }} // Scale up for popup effect
+                  exit={{ scale: 0, rotate: 10 }} // Exit with scale and rotate
+                  transition={{ duration: 0.5, type: "spring", stiffness: 300 }} // Duration for scaling effect
+                >
+                  {/* Transparent Text Container */}
+                  <motion.div
+                    className={`relative flex-1 z-20 p-8 ${
+                      index % 2 === 0 ? 'text-left' : 'text-right'
+                    }`}
+                    initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }} // Alternating direction for text
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3, duration: 0.8 }}
+                  >
+                    <div className="bg-black bg-opacity-50 p-4 rounded-lg">
+                      <h3 className="text-3xl font-bold text-orange-500">
+                        {randomFood.strMeal}
                       </h3>
-                    </BackgroundGradient>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <Image
-                        src={randomFood.strMealThumb}
-                        alt={randomFood.strMeal}
-                        height={300} // Adjust image height here
-                        width={300} // Adjust image width here
-                        style={{
-                          objectFit: 'cover',
-                          borderRadius: '50%', // Makes the image round
-                          border: '4px solid white', // Optional: Add white border to the image
-                        }}
-                        className="transition-opacity duration-500 ease-in-out"
-                        priority
-                      />
+                      <p className="text-lg text-white">{cuisine}</p>
                     </div>
-                  </div>
-                ) : (
-                  <p>No food found for {cuisine}</p>
-                )}
-              </div>
-            );
-          })}
-        </div>
+                  </motion.div>
+
+                  {/* Medium-Sized Food Image with Enhanced Animation */}
+                  <motion.div
+                    className="relative flex-1 z-10"
+                    whileHover={{ scale: 1.2, rotate: 3 }} // Hover effect with scale and subtle rotate
+                    initial={{ opacity: 0, y: 30, scale: 0.8 }} // Initial opacity, movement, and scale for entrance animation
+                    animate={{ opacity: 1, y: 0, scale: 1 }} // Animate to full visibility and size
+                    transition={{ duration: 0.7 }} // Animation timing
+                  >
+                    <Image
+                      src={randomFood.strMealThumb}
+                      alt={randomFood.strMeal}
+                      height={400} // Medium size image (reduced)
+                      width={400} // Medium size image (reduced)
+                      style={{
+                        objectFit: 'cover',
+                        borderRadius: '50%', // Circular shape
+                        border: '6px solid white', // Optional: Border styling
+                      }}
+                      className="transition-opacity duration-500 ease-in-out"
+                      priority
+                    />
+                  </motion.div>
+                </motion.div>
+              ) : (
+                <p>No food found for {cuisine}</p>
+              )}
+            </motion.div>
+          );
+        })}
       </div>
     </div>
   );
