@@ -71,9 +71,7 @@ const AreaFood = ({ cuisine }) => {
 
   return (
     <div className="relative w-screen h-screen">
-      <h2 className="text-secondary text-xl font-bold mb-4 text-center absolute top-4 left-0 right-0 z-50">
-        Best Foods for {cuisine}
-      </h2>
+     
       <div ref={triggerRef} className="w-screen h-[100vh]">
         <div ref={sectionRef} className="flex h-[100vh] w-[500vw]">
           {loading ? ( // Show loading state

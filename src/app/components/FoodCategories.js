@@ -13,9 +13,12 @@ const FoodCategories = () => {
   const sectionRef = useRef(null); // For GSAP animation
   const triggerRef = useRef(null); // For GSAP scroll trigger
   const router = useRouter(); // Initialize useRouter
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   gsap.registerPlugin(ScrollTrigger);
-
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
   const backgroundImages = [
     '/images/background.jpg',
     '/images/background-2.jpg',
@@ -43,6 +46,7 @@ const FoodCategories = () => {
       sectionRef.current,
       { translateX: 0 },
       {
+        translateX: window.innerWidth < 768 ? 0 : '-300vw', // Adjust for mobile
         translateX: '-300vw',
         ease: 'power2.inOut',
         duration: 2,
@@ -65,17 +69,17 @@ const FoodCategories = () => {
   };
 
   return (
-    <div className="relative w-screen h-screen">
+    <div className="relative w-screen h-screen ">
       <div ref={triggerRef} className="w-screen h-[100vh]">
-        <div ref={sectionRef} className="flex h-[100vh] w-[500vw]">
-          {Object.entries(categories).map(([foodType, foodItems], index) => {
+      <div ref={sectionRef} className="flex h-screen w-full overflow-x-hidden"> {/* Change to w-full */}
+      {Object.entries(categories).map(([foodType, foodItems], index) => {
             const randomFood = foodItems[Math.floor(Math.random() * foodItems.length)];
             const backgroundImage = backgroundImages[index % backgroundImages.length]; // Cycle through background images
 
             return (
               <div
                 key={foodType}
-                className="w-screen h-screen flex items-center justify-center relative"
+                className="w-screen h-screen flex items-center justify-center relative "
                 style={{
                   backgroundImage: `url(${backgroundImage})`,
                   backgroundSize: 'cover',
@@ -92,19 +96,20 @@ const FoodCategories = () => {
                       </h3>
                     </BackgroundGradient>
                     <div className="absolute inset-0 flex items-center justify-center"> {/* Centering the image */}
-                      <Image
-                        src={randomFood.strMealThumb}
-                        alt={randomFood.strMeal}
-                        height={300} // Adjust image height here
-                        width={300}  // Adjust image width here
-                        style={{
-                          objectFit: 'cover',
-                          borderRadius: '50%', // Makes the image round
-                          border: '4px solid white', // Optional: Add white border to the image
-                        }}
-                        className="transition-opacity duration-500 ease-in-out"
-                        priority
-                      />
+                    <Image
+  src={randomFood.strMealThumb}
+  alt={randomFood.strMeal}
+  height={300}
+  width={300}
+  style={{
+    objectFit: 'cover',
+    borderRadius: '50%',
+    border: '4px solid white',
+    maxWidth: '100%', // Ensure the image scales down
+    height: 'auto',   // Maintain aspect ratio
+  }}
+/>
+
                     </div>
                   </div>
                 ) : (
@@ -115,6 +120,15 @@ const FoodCategories = () => {
           })}
         </div>
       </div>
+      <nav className="navbar">
+        <button className="hamburger-button" onClick={toggleMenu}>
+          {/* Hamburger icon */}
+        </button>
+        <ul className={`navigation-menu ${isMenuOpen ? 'open' : ''}`}>
+          {/* Navigation items */}
+        </ul>
+      </nav>
+      
     </div>
   );
 };

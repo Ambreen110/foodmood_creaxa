@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 html,
 body,
 * {
@@ -13,7 +14,8 @@ body,
 
 :root {
   --backgroundColor: #9a9494;
-  --primaryColor: #0aa1ff;
+  --primaryColor: #00ABFE; /* Adjusted to your color scheme */
+  --secondaryColor: #EB8425; /* Adjusted to your color scheme */
   --primaryTextColor: #e6e6e6;
 
   --headlineBig: clamp(5rem, 9.9vw, 15rem);
@@ -24,6 +26,7 @@ body,
 
 body {
   background-color: var(--backgroundColor);
+  overflow-x: hidden;
 }
 
 .hero__header {
@@ -51,6 +54,12 @@ body {
 
 .scroll-section-outer {
   overflow: hidden;
+}
+@media (max-width: 768px) {
+  .scroll-section-inner {
+    width: 100%; /* Adjust width for mobile */
+    flex-direction: column; /* Stack items vertically */
+  }
 }
 
 .scroll-section-inner {
@@ -130,7 +139,13 @@ body {
   .space-x-4 > * {
     margin-bottom: 0.5rem; /* Add margin between links on mobile */
   }
+
+  /* Hide video on smaller screens */
+  .video {
+    display: none;
+  }
 }
+
 /* styles/globals.css or a specific CSS file for VideoBlast */
 
 .blast {
@@ -150,4 +165,19 @@ body {
     transform: scale(0);
     opacity: 0;
   }
+}
+.video-container {
+  position: relative;
+  overflow: hidden;
+  transition: transform 2s ease;
+}
+
+.video-container.blast {
+  transform: scale(1.2); /* Adjust this value for desired blast effect */
+  filter: brightness(1.2);
+}
+
+video {
+  width: 100%;
+  height: auto;
 }
