@@ -7,6 +7,8 @@ const Navbar = () => {
   const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isMoodOpen, setIsMoodOpen] = useState(false);
+  const [isCuisineOpen, setIsCuisineOpen] = useState(false);
 
   const handleScroll = () => {
     setIsScrolled(window.scrollY > 50); // Set true if scrolled more than 50 pixels
@@ -19,29 +21,104 @@ const Navbar = () => {
     };
   }, []);
 
-  const cuisines = [
-    { name: 'American' },
-    { name: 'Chinese' },
-    { name: 'Italian' },
-    { name: 'Mexican' },
-    { name: 'Indian' },
+  const cuisines = ['American', 'Chinese', 'Italian', 'Mexican', 'Indian'];
+
+  const moods = [
+    { name: 'Happy' },
+    { name: 'Adventurous' },
+    { name: 'Cozy' },
   ];
 
   const handleCuisineClick = (cuisine) => {
     router.push(`/areaFood/${cuisine}`);
-    setIsOpen(false);
+    setIsCuisineOpen(false);
+    setIsMoodOpen(false); // Close mood dropdown when a cuisine is selected
+  };
+
+  const handleMoodClick = (mood) => {
+    router.push(`/mood/${mood.name}`);
+    setIsMoodOpen(false);
+    setIsCuisineOpen(false); // Close cuisine dropdown when a mood is selected
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 p-4 transition-all duration-300 ${isScrolled ? 'bg-gray-500 shadow-lg' : 'bg-gray-500'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 p-4 transition-all duration-300 ${isScrolled ? 'bg-gray-700 shadow-md' : 'bg-transparent'}`}>
       <div className="container mx-auto flex justify-between items-center">
-        <h1 
-          className="text-xl font-bold cursor-pointer transition-colors duration-300 text-orange-500 hover:text-orange-300" 
-          onClick={() => router.push('/')}
-        >
-          FoodMood
-        </h1>
-        
+        {/* Logo/Image Section */}
+        <div className="flex items-center">
+          <h1 className={`text-2xl font-bold cursor-pointer ${isScrolled ? 'text-white' : 'text-gray-300'}`} onClick={() => router.push('/')}>
+            FoodMood
+          </h1>
+        </div>
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center space-x-6">
+          <button onClick={() => router.push('/')} className={`font-bold transition-colors duration-300 ${isScrolled ? 'text-white' : 'text-gray-300 hover:text-orange-300'}`}>
+            Home
+          </button>
+          <button onClick={() => router.push('/about')} className={`font-bold transition-colors duration-300 ${isScrolled ? 'text-white' : 'text-gray-300 hover:text-orange-300'}`}>
+            About Us
+          </button>
+          <button onClick={() => router.push('/contact')} className={`font-bold transition-colors duration-300 ${isScrolled ? 'text-white' : 'text-gray-300 hover:text-orange-300'}`}>
+            Contact Us
+          </button>
+
+          {/* Mood Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => {
+                setIsMoodOpen(!isMoodOpen);
+                if (isCuisineOpen) setIsCuisineOpen(false); // Close cuisine dropdown
+              }}
+              className={`font-bold transition-colors duration-300 ${isScrolled ? 'text-white' : 'text-gray-300 hover:text-orange-300'}`}
+            >
+              Mood
+            </button>
+            {isMoodOpen && (
+              <div className="absolute flex flex-col bg-gray-800 rounded-md shadow-lg mt-2 py-2 right-0">
+                {moods.map((mood) => (
+                  <button
+                    key={mood.name}
+                    onClick={() => handleMoodClick(mood)}
+                    className="px-8 py-3 rounded-full text-lg font-semibold text-white hover:bg-gray-700 transition transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    aria-label={`Select ${mood.name} mood`}
+                  >
+                    {mood.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Cuisine Dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => {
+                setIsCuisineOpen(!isCuisineOpen);
+                if (isMoodOpen) setIsMoodOpen(false); // Close mood dropdown
+              }}
+              className={`font-bold transition-colors duration-300 ${isScrolled ? 'text-white' : 'text-gray-300 hover:text-orange-300'}`}
+            >
+              Cuisine
+            </button>
+            {isCuisineOpen && (
+              <div className="absolute flex flex-col bg-gray-800 rounded-md shadow-lg mt-2 py-2 right-0">
+                {cuisines.map((cuisine) => (
+                  <button 
+                    key={cuisine}
+                    onClick={() => handleCuisineClick(cuisine)}
+                    className="px-8 py-3 rounded-full text-lg font-semibold text-white hover:bg-gray-700 transition transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    aria-label={`Select ${cuisine} cuisine`}
+                  >
+                    {cuisine}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Mobile Menu Button */}
         <button 
           className="md:hidden focus:outline-none" 
           onClick={() => setIsOpen(!isOpen)}
@@ -62,33 +139,41 @@ const Navbar = () => {
             />
           </svg>
         </button>
+      </div>
 
-        <div className={`hidden md:flex md:space-x-6 text-orange-500 font-bold transition-all duration-300`}>
+      {/* Mobile Navigation Menu */}
+      {isOpen && (
+        <div className="md:hidden flex flex-col items-center bg-gray-900 bg-opacity-90 rounded-lg shadow-lg mt-4 py-4">
+          <button onClick={() => router.push('/')} className="font-bold text-white mb-2 hover:text-orange-300">Home</button>
+          <button onClick={() => router.push('/about')} className="font-bold text-white mb-2 hover:text-orange-300">About Us</button>
+          <button onClick={() => router.push('/contact')} className="font-bold text-white mb-2 hover:text-orange-300">Contact Us</button>
+          
+          {/* Mood Links */}
+          <p className="text-gray-400 mt-4 mb-1">Mood</p>
+          {moods.map((mood) => (
+            <button
+              key={mood.name}
+              onClick={() => handleMoodClick(mood)}
+              className="px-8 py-3 rounded-full text-lg font-semibold text-white hover:bg-gray-700 transition transform hover:scale-105 shadow-lg hover:shadow-xl mb-2"
+              aria-label={`Select ${mood.name} mood`}
+            >
+              {mood.name}
+            </button>
+          ))}
+
+          {/* Cuisine Links */}
+          <p className="text-gray-400 mt-4 mb-1">Cuisine</p>
           {cuisines.map((cuisine) => (
             <button 
-              key={cuisine.name} 
-              onClick={() => handleCuisineClick(cuisine.name)} 
-              className={`block py-2 px-4 transition-colors duration-300 hover:text-orange-300`}
+              key={cuisine} 
+              onClick={() => handleCuisineClick(cuisine)}
+              className="px-8 py-3 rounded-full text-lg font-semibold text-white hover:bg-gray-700 transition transform hover:scale-105 shadow-lg hover:shadow-xl mb-2"
             >
-              {cuisine.name}
+              {cuisine}
             </button>
           ))}
         </div>
-      </div>
-
-      <div className={`md:hidden ${isOpen ? 'block' : 'hidden'} transition-all duration-300 bg-gray-800 bg-opacity-90 rounded-lg shadow-lg`}>
-        <div className="flex flex-col items-center py-4">
-          {cuisines.map((cuisine) => (
-            <button 
-              key={cuisine.name} 
-              onClick={() => handleCuisineClick(cuisine.name)} 
-              className={`block py-2 px-4 w-full text-left text-orange-500 font-bold transition-colors duration-300 hover:text-orange-300`}
-            >
-              {cuisine.name}
-            </button>
-          ))}
-        </div>
-      </div>
+      )}
     </nav>
   );
 };

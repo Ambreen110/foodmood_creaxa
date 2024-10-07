@@ -1,12 +1,14 @@
 import React from 'react';
 import FoodCategories from '../../components/FoodCategories';
+import MoodHeroSection from '@/app/components/MoodHeroSection';
 
 const MoodPage = ({ params }) => {
-  const {mood} = params; // Default mood
+  const { mood } = params; // Extract the mood from params
 
   return (
     <div>
-      <h1 className="text-center text-2xl font-bold mb-8">{mood}</h1>
+      <MoodHeroSection mood={mood} /> {/* Pass the mood prop */}
+      
       <FoodCategories mood={mood} />
     </div>
   );

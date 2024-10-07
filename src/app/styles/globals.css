@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* General Reset */
 html,
 body,
 * {
@@ -12,11 +13,12 @@ body,
     Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+/* Root Variables for Theme Colors and Typography */
 :root {
-  --backgroundColor: #9a9494;
-  --primaryColor: #00ABFE; /* Adjusted to your color scheme */
-  --secondaryColor: #EB8425; /* Adjusted to your color scheme */
-  --primaryTextColor: #e6e6e6;
+  --backgroundColor: #ffffff; /* Light background for a clean look */
+  --primaryColor: #00ACFD; /* Blue */
+  --secondaryColor: #EA8110; /* Orange */
+  --primaryTextColor: #333333; /* Dark text color for readability */
 
   --headlineBig: clamp(5rem, 9.9vw, 15rem);
   --headlineMedium: clamp(1rem, 2vw, 4rem);
@@ -24,25 +26,50 @@ body,
   --spacing: clamp(0.9rem, 0.75vw, 1.3rem);
 }
 
+/* Body Styling */
 body {
   background-color: var(--backgroundColor);
+  color: var(--primaryTextColor);
   overflow-x: hidden;
 }
 
+/* Header and Footer Styling */
+.header, .footer {
+  background-color: var(--primaryColor);
+  color: var(--primaryTextColor);
+  padding: 1rem 2rem;
+  text-align: center;
+  font-weight: bold;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header a, .footer a {
+  color: var(--primaryTextColor);
+  margin: 0 1rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.header a:hover, .footer a:hover {
+  color: var(--secondaryColor);
+}
+
+/* Hero Header Styling */
 .hero__header {
   height: 100vh;
   display: flex;
-  text-align: center;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
   gap: 2rem;
+  padding: 2rem;
 }
 
 .hero__header h1 {
-  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   font-size: var(--headlineBig);
   color: var(--primaryTextColor);
+  font-weight: 700;
 }
 
 .hero__header h2 {
@@ -52,16 +79,31 @@ body {
   color: var(--primaryColor);
 }
 
+/* Typography */
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primaryColor);
+}
+
+h2, h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--secondaryColor);
+}
+
+p {
+  line-height: 1.6;
+  color: var(--primaryTextColor);
+}
+
+/* Scroll Section Styling */
 .scroll-section-outer {
   overflow: hidden;
 }
-@media (max-width: 768px) {
-  .scroll-section-inner {
-    width: 100%; /* Adjust width for mobile */
-    flex-direction: column; /* Stack items vertically */
-  }
+.gradient-background {
+  background: linear-gradient(to bottom right, #4382EF, #FA923D);
 }
-
 .scroll-section-inner {
   height: 100vh;
   width: 400vw;
@@ -85,68 +127,58 @@ body {
   text-transform: uppercase;
 }
 
-.footer {
-  height: 20vh; /* Or any smaller value instead of 100vh */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* Button Styling */
+.btn-primary {
+  background-color: var(--secondaryColor);
+  color: #fff;
+  padding: 0.8rem 1.2rem;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-/* styles/globals.css or your preferred CSS file */
-
-.bg-primary {
-  background-color: #ff6347; /* Example primary color */
+.btn-primary:hover {
+  background-color: #FF9933;
 }
 
-.bg-transparent {
-  background-color: transparent; /* Make the background transparent on scroll */
-}
-
-.text-black {
-  color: black; /* Change text color to black on scroll */
-}
-
-.text-white {
-  color: white; /* Keep text color white by default */
-}
-
-.bg-secondary {
-  background-color: #ffa07a; /* Example secondary color for hover effects */
-}
-
-.fixed {
-  position: fixed;
-  width: 100%; /* Ensure it spans full width */
-  transition: background-color 0.3s ease; /* Smooth transition for background color */
-}
-
-.container {
-  max-width: 1200px; /* Adjust according to your design */
-  margin: 0 auto;
-}
-
+/* Responsive Design */
 @media (max-width: 768px) {
   .container {
-    flex-direction: column; /* Stack items vertically on mobile */
-    align-items: flex-start; /* Align items to the start */
+    padding: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  .flex {
-    flex-direction: column; /* Stack links vertically on mobile */
-    align-items: flex-start; /* Align links to the start */
+  h1 {
+    font-size: 2rem;
   }
 
-  .space-x-4 > * {
-    margin-bottom: 0.5rem; /* Add margin between links on mobile */
+  .hero__header {
+    padding: 1rem;
   }
 
-  /* Hide video on smaller screens */
+  .scroll-section-inner {
+    width: 100%; /* Stack items vertically for mobile */
+    flex-direction: column;
+  }
+
   .video {
-    display: none;
+    display: none; /* Hide video on smaller screens */
   }
 }
 
-/* styles/globals.css or a specific CSS file for VideoBlast */
+/* Video Container and Animation */
+.video-container {
+  position: relative;
+  overflow: hidden;
+  transition: transform 2s ease;
+}
+
+.video-container.blast {
+  transform: scale(1.2);
+  filter: brightness(1.2);
+}
 
 .blast {
   animation: blastAnimation 1s forwards;
@@ -166,18 +198,35 @@ body {
     opacity: 0;
   }
 }
-.video-container {
-  position: relative;
-  overflow: hidden;
-  transition: transform 2s ease;
+
+/* Utility Classes */
+.bg-primary {
+  background-color: var(--primaryColor);
 }
 
-.video-container.blast {
-  transform: scale(1.2); /* Adjust this value for desired blast effect */
-  filter: brightness(1.2);
+.bg-secondary {
+  background-color: var(--secondaryColor);
 }
 
-video {
+.text-black {
+  color: black;
+}
+
+.text-white {
+  color: white;
+}
+
+.bg-transparent {
+  background-color: transparent;
+}
+
+.fixed {
+  position: fixed;
   width: 100%;
-  height: auto;
+  transition: background-color 0.3s ease;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
 }

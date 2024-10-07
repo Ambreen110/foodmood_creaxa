@@ -5,7 +5,7 @@ import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { BackgroundGradient } from "./ui/background-gradient";
-import { useRouter } from "next/navigation"; // Import useRouter from next/navigation
+import { useRouter } from "next/navigation";
 
 const AreaFood = ({ cuisine }) => {
   const [bestFoods, setBestFoods] = useState([]);
@@ -19,7 +19,7 @@ const AreaFood = ({ cuisine }) => {
   useEffect(() => {
     const fetchBestFoods = async () => {
       const foodData = [];
-      if (!cuisine) return; // Exit if cuisine is not defined
+      if (!cuisine) return;
 
       try {
         const res = await fetch(`/api/bestFoods?cuisine=${cuisine}`);
@@ -34,9 +34,9 @@ const AreaFood = ({ cuisine }) => {
       }
     };
 
-    fetchBestFoods(); // Call the fetch function
+    fetchBestFoods();
 
-    // Only apply horizontal scroll animations on desktop
+    // Horizontal scroll animation for desktop
     const viewportWidth = window.innerWidth;
 
     if (viewportWidth > 768) {
@@ -44,7 +44,7 @@ const AreaFood = ({ cuisine }) => {
         sectionRef.current,
         { translateX: 0 },
         {
-          translateX: "-300vw", // Horizontal scroll for larger screens
+          translateX: "-300vw",
           ease: "power2.inOut",
           duration: 2,
           scrollTrigger: {
@@ -66,7 +66,6 @@ const AreaFood = ({ cuisine }) => {
     router.push(`/recipes/${idMeal}`);
   };
 
-  // Array of gradient backgrounds for each food card
   const gradientBackgrounds = [
     "bg-gradient-to-r from-orange-400 to-blue-500",
     "bg-gradient-to-r from-purple-400 to-pink-500",
@@ -76,26 +75,28 @@ const AreaFood = ({ cuisine }) => {
 
   return (
     <div className="relative w-screen h-screen bg-gray-100">
+      <h2 className="text-center bg-[#1D1D16]">{ cuisine } Cuisine</h2>
       <div ref={triggerRef} className="w-screen h-[100vh]">
-        {/* Container for large screens */}
         <div
           ref={sectionRef}
-          className="flex lg:h-[100vh] lg:w-[500vw] lg:flex-row flex-col h-auto"
+          className="flex lg:h-[100vh] lg:w-[500vw] flex-col h-auto space-y-4 lg:space-y-0 lg:flex-row"
         >
-          {loading ? ( // Show loading state
-            <p className="text-lg">Loading...</p>
+          {loading ? (
+            <div className="flex justify-center items-center h-full">
+              <p className="text-lg">Loading...</p>
+            </div>
           ) : bestFoods.length > 0 ? (
             bestFoods.map((food, index) => (
               <div
                 key={food.idMeal}
-                className={`w-screen h-screen flex items-center justify-center relative lg:w-screen lg:h-screen py-10 ${gradientBackgrounds[index % gradientBackgrounds.length]}`} // Apply unique gradient background
+                className={`w-screen h-screen flex items-center justify-center relative lg:w-screen lg:h-screen py-10 rounded-lg shadow-lg ${gradientBackgrounds[index % gradientBackgrounds.length]}`}
               >
                 <div
                   onClick={() => handleMealClick(food.idMeal)}
-                  className="block w-full h-full cursor-pointer group"
+                  className="block w-full h-full cursor-pointer group transition-transform duration-500 ease-in-out"
                 >
                   <BackgroundGradient className="absolute inset-0 z-10 flex flex-col items-center justify-center h-full w-full">
-                    <h3 className="text-lg font-semibold mt-52 text-center text-orange-500 bg-black bg-opacity-50 p-2 rounded-lg transition duration-500 ease-in-out group-hover:scale-110 group-hover:text-yellow-400">
+                    <h3 className="text-xl font-semibold mt-32 text-center text-white bg-black bg-opacity-50 p-4 rounded-lg transition duration-300 ease-in-out group-hover:text-yellow-400">
                       {food.strMeal}
                     </h3>
                   </BackgroundGradient>
@@ -103,12 +104,12 @@ const AreaFood = ({ cuisine }) => {
                     <Image
                       src={food.strMealThumb}
                       alt={food.strMeal}
-                      height={250} // Medium size image
-                      width={250} // Medium size image
+                      height={300}
+                      width={300}
                       style={{
                         objectFit: "cover",
-                        borderRadius: "50%", // Makes the image round
-                        border: "4px solid white", // Optional: Add white border to the image
+                        borderRadius: "50%",
+                        border: "4px solid white",
                       }}
                       className="transition-transform duration-700 ease-in-out group-hover:rotate-6 group-hover:scale-125 transform"
                       priority
@@ -118,7 +119,9 @@ const AreaFood = ({ cuisine }) => {
               </div>
             ))
           ) : (
-            <p>No best foods found for {cuisine || "this cuisine"}.</p>
+            <div className="flex justify-center items-center h-full">
+              <p>No best foods found for {cuisine || "this cuisine"}.</p>
+            </div>
           )}
         </div>
       </div>
