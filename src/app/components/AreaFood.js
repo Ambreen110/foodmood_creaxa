@@ -1,4 +1,4 @@
-"use client"; // Ensure this is at the top of the file
+"use client";
 
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 const AreaFood = ({ cuisine }) => {
   const [bestFoods, setBestFoods] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const sectionRef = useRef(null);
   const triggerRef = useRef(null);
   const router = useRouter();
@@ -25,9 +26,10 @@ const AreaFood = ({ cuisine }) => {
         const res = await fetch(`/api/bestFoods?cuisine=${cuisine}`);
         if (!res.ok) throw new Error(`Failed to fetch foods for ${cuisine}`);
         const data = await res.json();
-        foodData.push(...data);
+        foodData.push( data);
       } catch (error) {
         console.error("Error fetching best foods:", error);
+        setError(error.message);
       } finally {
         setBestFoods(foodData);
         setLoading(false);
@@ -36,7 +38,6 @@ const AreaFood = ({ cuisine }) => {
 
     fetchBestFoods();
 
-    // Horizontal scroll animation for desktop
     const viewportWidth = window.innerWidth;
 
     if (viewportWidth > 768) {
@@ -58,7 +59,10 @@ const AreaFood = ({ cuisine }) => {
         }
       );
 
-      return () => pin.kill();
+      return () => {
+        pin.kill();
+        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      };
     }
   }, [cuisine]);
 
@@ -82,7 +86,11 @@ const AreaFood = ({ cuisine }) => {
         >
           {loading ? (
             <div className="flex justify-center items-center h-full">
-              <p className="text-lg">Loading...</p>
+              <p className="text-lg">Loading </p>
+            </div>
+          ) : error ? (
+            <div className="flex justify-center items-center h-full">
+              <p className="text-lg text-red-500">{error}</p>
             </div>
           ) : bestFoods.length > 0 ? (
             bestFoods.map((food, index) => (
@@ -93,6 +101,9 @@ const AreaFood = ({ cuisine }) => {
                 <div
                   onClick={() => handleMealClick(food.idMeal)}
                   className="block w-full h-full cursor-pointer group transition-transform duration-500 ease-in-out"
+                  role="button"
+                  tabIndex={0}
+                  onKeyPress={(e) => e.key === 'Enter' && handleMealClick(food.idMeal)}
                 >
                   <BackgroundGradient className="absolute inset-0 z-10 flex flex-col items-center justify-center h-full w-full">
                     <h3 className="text-xl font-semibold mt-32 text-center text-white bg-black bg-opacity-50 p-4 rounded-lg transition duration-300 ease-in-out group-hover:text-yellow-400">

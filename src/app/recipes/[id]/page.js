@@ -58,7 +58,7 @@ const RecipePage = () => {
         )}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-transparent flex items-end justify-center">
           <h1 className="text-4xl text-white font-bold p-4">
-            {loading ? 'Loading Recipe...' : recipe?.strMeal}
+            {loading ? 'Loading Recipe ' : recipe?.strMeal}
           </h1>
         </div>
       </div>
@@ -66,7 +66,7 @@ const RecipePage = () => {
       {/* Content Section */}
       <div className="max-w-4xl p-6 bg-white rounded-lg shadow-xl -mt-16 z-10 recipe-card">
         {loading ? (
-          <p className="text-center text-lg text-gray-700">Loading recipe...</p>
+          <p className="text-center text-lg text-gray-700">Loading recipe </p>
         ) : recipe ? (
           <div className="flex flex-col md:flex-row items-start gap-6">
             {/* Recipe Description */}
