@@ -46,7 +46,7 @@ const MoodHeroSection = ({ mood }) => {
         <h1 className="text-white text-5xl md:text-6xl font-bold mb-4">
           {title}
         </h1>
-        <p className="text-yellow-300 text-lg md:text-xl">
+        <p className="text-[#E97415] text-lg md:text-xl">
           {description}
         </p>
       </div>

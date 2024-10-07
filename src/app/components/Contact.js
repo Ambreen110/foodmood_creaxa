@@ -40,7 +40,7 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-cover bg-center"
-      style={{ backgroundImage: "url('/path/to/your/food-background.jpg')" }}>
+      >
       <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
         <h2 className="text-2xl font-bold mb-4 text-center">Contact Us</h2>
         <form onSubmit={handleSubmit}>

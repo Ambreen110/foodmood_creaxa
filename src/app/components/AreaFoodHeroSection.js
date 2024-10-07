@@ -21,7 +21,7 @@ const AreaFoodHeroSection = () => {
       {/* Window Frame Effect */}
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center text-center z-10">
         <div className="p-8 bg-white rounded-lg shadow-lg border-4 border-gray-300">
-          <h1 className="text-yellow-400 text-5xl md:text-6xl font-bold">
+          <h1 className="text-[#E97415] text-5xl md:text-6xl font-bold">
             Cuisine
           </h1>
           <p className="text-gray-700 mt-4 text-lg">

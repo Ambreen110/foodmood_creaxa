@@ -46,20 +46,29 @@ const Navbar = () => {
       <div className="container mx-auto flex justify-between items-center">
         {/* Logo/Image Section */}
         <div className="flex items-center">
-          <h1 className={`text-2xl font-bold cursor-pointer ${isScrolled ? 'text-white' : 'text-gray-300'}`} onClick={() => router.push('/')}>
+          <h1 className={`text-2xl font-bold cursor-pointer ${isScrolled ? 'text-white' : 'text-gray-600'}`} onClick={() => router.push('/')}>
             FoodMood
           </h1>
         </div>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-6">
-          <button onClick={() => router.push('/')} className={`font-bold transition-colors duration-300 ${isScrolled ? 'text-white' : 'text-gray-300 hover:text-orange-300'}`}>
+          <button 
+            onClick={() => router.push('/')}
+            className={`px-4 py-2 rounded-full font-bold transition-colors duration-300 ${isScrolled ? 'bg-[#00ADFD] text-white hover:bg-[#EB8425]' : 'bg-[#00ADFD] text-white hover:bg-[#EB8425]'}`}
+          >
             Home
           </button>
-          <button onClick={() => router.push('/about')} className={`font-bold transition-colors duration-300 ${isScrolled ? 'text-white' : 'text-gray-300 hover:text-orange-300'}`}>
+          <button 
+            onClick={() => router.push('/about')}
+            className={`px-4 py-2 rounded-full font-bold transition-colors duration-300 ${isScrolled ? 'bg-[#00ADFD] text-white hover:bg-[#EB8425]' : 'bg-[#00ADFD] text-white hover:bg-[#EB8425]'}`}
+          >
             About Us
           </button>
-          <button onClick={() => router.push('/contact')} className={`font-bold transition-colors duration-300 ${isScrolled ? 'text-white' : 'text-gray-300 hover:text-orange-300'}`}>
+          <button 
+            onClick={() => router.push('/contact')}
+            className={`px-4 py-2 rounded-full font-bold transition-colors duration-300 ${isScrolled ? 'bg-[#00ADFD] text-white hover:bg-[#EB8425]' : 'bg-[#00ADFD] text-white hover:bg-[#EB8425]'}`}
+          >
             Contact Us
           </button>
 
@@ -70,7 +79,7 @@ const Navbar = () => {
                 setIsMoodOpen(!isMoodOpen);
                 if (isCuisineOpen) setIsCuisineOpen(false); // Close cuisine dropdown
               }}
-              className={`font-bold transition-colors duration-300 ${isScrolled ? 'text-white' : 'text-gray-300 hover:text-orange-300'}`}
+              className={`px-4 py-2 rounded-full font-bold transition-colors duration-300 ${isScrolled ? 'bg-[#00ADFD] text-white hover:bg-[#EB8425]' : 'bg-[#00ADFD] text-white hover:bg-[#EB8425]'}`}
             >
               Mood
             </button>
@@ -80,7 +89,7 @@ const Navbar = () => {
                   <button
                     key={mood.name}
                     onClick={() => handleMoodClick(mood)}
-                    className="px-8 py-3 rounded-full text-lg font-semibold text-white hover:bg-gray-700 transition transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    className="px-8 py-3 rounded-full text-lg font-semibold text-white bg-[#00ADFD] hover:bg-[#EB8425] transition transform hover:scale-105 shadow-lg hover:shadow-xl"
                     aria-label={`Select ${mood.name} mood`}
                   >
                     {mood.name}
@@ -97,7 +106,7 @@ const Navbar = () => {
                 setIsCuisineOpen(!isCuisineOpen);
                 if (isMoodOpen) setIsMoodOpen(false); // Close mood dropdown
               }}
-              className={`font-bold transition-colors duration-300 ${isScrolled ? 'text-white' : 'text-gray-300 hover:text-orange-300'}`}
+              className={`px-4 py-2 rounded-full font-bold transition-colors duration-300 ${isScrolled ? 'bg-[#00ADFD] text-white hover:bg-[#EB8425]' : 'bg-[#00ADFD] text-white hover:bg-[#EB8425]'}`}
             >
               Cuisine
             </button>
@@ -107,7 +116,7 @@ const Navbar = () => {
                   <button 
                     key={cuisine}
                     onClick={() => handleCuisineClick(cuisine)}
-                    className="px-8 py-3 rounded-full text-lg font-semibold text-white hover:bg-gray-700 transition transform hover:scale-105 shadow-lg hover:shadow-xl"
+                    className="px-8 py-3 rounded-full text-lg font-semibold text-white bg-[#00ADFD] hover:bg-[#EB8425] transition transform hover:scale-105 shadow-lg hover:shadow-xl"
                     aria-label={`Select ${cuisine} cuisine`}
                   >
                     {cuisine}
@@ -144,9 +153,9 @@ const Navbar = () => {
       {/* Mobile Navigation Menu */}
       {isOpen && (
         <div className="md:hidden flex flex-col items-center bg-gray-900 bg-opacity-90 rounded-lg shadow-lg mt-4 py-4">
-          <button onClick={() => router.push('/')} className="font-bold text-white mb-2 hover:text-orange-300">Home</button>
-          <button onClick={() => router.push('/about')} className="font-bold text-white mb-2 hover:text-orange-300">About Us</button>
-          <button onClick={() => router.push('/contact')} className="font-bold text-white mb-2 hover:text-orange-300">Contact Us</button>
+          <button onClick={() => router.push('/')} className="px-4 py-2 rounded-full font-bold text-white bg-[#00ADFD] hover:bg-[#EB8425] mb-2">Home</button>
+          <button onClick={() => router.push('/about')} className="px-4 py-2 rounded-full font-bold text-white bg-[#00ADFD] hover:bg-[#EB8425] mb-2">About Us</button>
+          <button onClick={() => router.push('/contact')} className="px-4 py-2 rounded-full font-bold text-white bg-[#00ADFD] hover:bg-[#EB8425] mb-2">Contact Us</button>
           
           {/* Mood Links */}
           <p className="text-gray-400 mt-4 mb-1">Mood</p>
@@ -154,7 +163,7 @@ const Navbar = () => {
             <button
               key={mood.name}
               onClick={() => handleMoodClick(mood)}
-              className="px-8 py-3 rounded-full text-lg font-semibold text-white hover:bg-gray-700 transition transform hover:scale-105 shadow-lg hover:shadow-xl mb-2"
+              className="px-8 py-3 rounded-full text-lg font-semibold text-white bg-[#00ADFD] hover:bg-[#EB8425] transition transform hover:scale-105 shadow-lg hover:shadow-xl mb-2"
               aria-label={`Select ${mood.name} mood`}
             >
               {mood.name}
@@ -167,7 +176,7 @@ const Navbar = () => {
             <button 
               key={cuisine} 
               onClick={() => handleCuisineClick(cuisine)}
-              className="px-8 py-3 rounded-full text-lg font-semibold text-white hover:bg-gray-700 transition transform hover:scale-105 shadow-lg hover:shadow-xl mb-2"
+              className="px-8 py-3 rounded-full text-lg font-semibold text-white bg-[#00ADFD] hover:bg-[#EB8425] transition transform hover:scale-105 shadow-lg hover:shadow-xl mb-2"
             >
               {cuisine}
             </button>
