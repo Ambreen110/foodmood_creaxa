@@ -95,7 +95,7 @@ const AreaFood = ({ cuisine }) => {
                   className="block w-full h-full cursor-pointer group transition-transform duration-500 ease-in-out"
                 >
                   <BackgroundGradient className="absolute inset-0 z-10 flex flex-col items-center justify-center h-full w-full">
-                    <h3 className="text-xl font-semibold mt-32 text-center text-white bg-black bg-opacity-50 p-4 rounded-lg transition duration-300 ease-in-out group-hover:text-[#E97415]">
+                    <h3 className="text-xl font-semibold mt-32 text-center text-white bg-black bg-opacity-50 p-4 rounded-lg transition duration-300 ease-in-out group-hover:text-yellow-400">
                       {food.strMeal}
                     </h3>
                   </BackgroundGradient>
