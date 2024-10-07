@@ -23,6 +23,8 @@ const FoodCategories = ({ mood }) => {
     'linear-gradient(135deg, #667eea, #764ba2)',
   ];
 
+  const isMobile = typeof window !== "undefined" && window.innerWidth <= 768; // Check if the device is mobile
+
   useEffect(() => {
     const fetchMealCategories = async () => {
       try {
@@ -45,6 +47,7 @@ const FoodCategories = ({ mood }) => {
 
     fetchMealCategories();
 
+<<<<<<< HEAD
     sectionRefs.current.forEach((section, index) => {
       if (section) {
         gsap.fromTo(
@@ -65,6 +68,30 @@ const FoodCategories = ({ mood }) => {
       }
     });
   }, []);
+=======
+    if (!isMobile) {
+      const pin = gsap.fromTo(
+        sectionRef.current,
+        { translateY: 0 }, // Change to translateY for vertical scrolling
+        {
+          translateY: '-200vh', // Adjust to control how far to scroll
+          ease: 'power2.inOut',
+          duration: 2,
+          scrollTrigger: {
+            trigger: triggerRef.current,
+            start: 'top top',
+            end: '+=5000',
+            scrub: 0.5,
+            pin: true,
+            pinSpacing: true,
+          },
+        }
+      );
+
+      return () => pin.kill(); // Cleanup on component unmount
+    }
+  }, [isMobile]); // Add isMobile to dependencies
+>>>>>>> 3f40ba32c43f15b261dad55fc8da7f4c39be369d
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -84,6 +111,7 @@ const FoodCategories = ({ mood }) => {
     router.push(`/recipes/${idMeal}`);
   };
 
+<<<<<<< HEAD
   const filteredCategories = Object.entries(categories).filter(([foodType]) => foodType === mood);
 
   return (
@@ -140,6 +168,50 @@ const FoodCategories = ({ mood }) => {
                         </div>
                       </div>
                     ))}
+=======
+  return (
+    <div className="relative w-screen h-screen overflow-hidden">
+      <div ref={triggerRef} className={`w-screen h-[100vh] ${isMobile ? 'overflow-y-auto' : ''}`}>
+        <div ref={sectionRef} className={`flex ${isMobile ? 'flex-col' : 'h-[100vh] w-screen'}`}>
+          {Object.entries(categories).map(([foodType, foodItems], index) => {
+            const randomFood = foodItems[Math.floor(Math.random() * foodItems.length)];
+            const backgroundImage = backgroundImages[index % backgroundImages.length]; // Cycle through background images
+
+            return (
+              <div
+                key={foodType}
+                className={`w-screen h-[100vh] flex items-center justify-center relative ${isMobile ? 'flex-col' : ''}`} // Change layout for mobile
+                style={{
+                  backgroundImage: `url(${backgroundImage})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
+              >
+                {loading ? ( // Show loading state
+                  <p className="text-lg">Loading...</p>
+                ) : randomFood ? (
+                  <div onClick={() => handleMealClick(randomFood.idMeal)} className="block w-full h-full cursor-pointer">
+                    <BackgroundGradient className="absolute inset-0 z-10 flex flex-col items-center justify-center h-full w-full">
+                      <h3 className="text-lg font-semibold mt-5 text-center text-orange-500 bg-black bg-opacity-50 p-2 rounded-lg">
+                        {randomFood.strMeal}
+                      </h3>
+                    </BackgroundGradient>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Image
+                        src={randomFood.strMealThumb}
+                        alt={randomFood.strMeal}
+                        height={300} // Adjust image height here
+                        width={300}  // Adjust image width here
+                        style={{
+                          objectFit: 'cover',
+                          borderRadius: '50%', // Makes the image round
+                          border: '4px solid white', // Optional: Add white border to the image
+                        }}
+                        className="transition-opacity duration-500 ease-in-out"
+                        priority
+                      />
+                    </div>
+>>>>>>> 3f40ba32c43f15b261dad55fc8da7f4c39be369d
                   </div>
                 </div>
               );

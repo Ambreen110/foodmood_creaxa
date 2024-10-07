@@ -16,6 +16,19 @@ const AreaFood = ({ cuisine }) => {
 
   gsap.registerPlugin(ScrollTrigger);
 
+<<<<<<< HEAD
+=======
+  const backgrounds = [
+    "/images/background.jpg",
+    "/images/background-2.jpg",
+    "/images/background-3.jpg",
+    "/images/background-4.jpg",
+    "/images/background-5.jpg",
+  ];
+
+  const isMobile = typeof window !== "undefined" && window.innerWidth <= 768; // Check if the device is mobile
+
+>>>>>>> 3f40ba32c43f15b261dad55fc8da7f4c39be369d
   useEffect(() => {
     const fetchBestFoods = async () => {
       const foodData = [];
@@ -36,6 +49,7 @@ const AreaFood = ({ cuisine }) => {
 
     fetchBestFoods();
 
+<<<<<<< HEAD
     // Horizontal scroll animation for desktop
     const viewportWidth = window.innerWidth;
 
@@ -61,17 +75,54 @@ const AreaFood = ({ cuisine }) => {
       return () => pin.kill();
     }
   }, [cuisine]);
+=======
+    if (!isMobile) {
+      const pin = gsap.fromTo(
+        sectionRef.current,
+        { translateX: 0 },
+        {
+          translateX: "-300vw",
+          ease: "power2.inOut",
+          duration: 2,
+          scrollTrigger: {
+            trigger: triggerRef.current,
+            start: "top top",
+            end: "+=5000",
+            scrub: 0.5,
+            pin: true,
+            pinSpacing: true,
+          },
+        }
+      );
+
+      return () => pin.kill();
+    }
+  }, [cuisine, isMobile]); // Add isMobile to dependencies
+>>>>>>> 3f40ba32c43f15b261dad55fc8da7f4c39be369d
 
   const handleMealClick = (idMeal) => {
     router.push(`/recipes/${idMeal}`);
   };
 
+<<<<<<< HEAD
   const gradientBackgrounds = [
     "bg-gradient-to-r from-orange-400 to-blue-500",
     "bg-gradient-to-r from-purple-400 to-pink-500",
     "bg-gradient-to-r from-green-400 to-yellow-500",
     "bg-gradient-to-r from-blue-400 to-indigo-500",
   ];
+=======
+  return (
+    <div className="relative w-screen h-screen overflow-x-hidden"> {/* Added overflow-x-hidden */}
+     
+      <div ref={triggerRef} className="w-screen h-[100vh] overflow-x-auto"> {/* Added overflow-x-auto for horizontal scrolling */}
+        <div ref={sectionRef} className={`flex ${isMobile ? 'flex-col' : 'h-[100vh] w-[500vw]'}`}>
+          {loading ? ( // Show loading state
+            <p className="text-lg">Loading...</p>
+          ) : bestFoods.length > 0 ? (
+            bestFoods.map((food, index) => {
+              const backgroundImage = backgrounds[index % backgrounds.length]; // Cycle through background images
+>>>>>>> 3f40ba32c43f15b261dad55fc8da7f4c39be369d
 
   return (
     <div className="relative w-screen h-screen bg-gray-100">
@@ -92,8 +143,18 @@ const AreaFood = ({ cuisine }) => {
                 className={`w-screen h-screen flex items-center justify-center relative lg:w-screen lg:h-screen py-10 rounded-lg shadow-lg ${gradientBackgrounds[index % gradientBackgrounds.length]}`}
               >
                 <div
+<<<<<<< HEAD
                   onClick={() => handleMealClick(food.idMeal)}
                   className="block w-full h-full cursor-pointer group transition-transform duration-500 ease-in-out"
+=======
+                  key={food.idMeal}
+                  className="w-screen h-screen flex items-center justify-center relative flex-shrink-0" // Added flex-shrink-0 to prevent shrinking
+                  style={{
+                    backgroundImage: `url(${backgroundImage})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+>>>>>>> 3f40ba32c43f15b261dad55fc8da7f4c39be369d
                 >
                   <BackgroundGradient className="absolute inset-0 z-10 flex flex-col items-center justify-center h-full w-full">
                     <h3 className="text-xl font-semibold mt-32 text-center text-white bg-black bg-opacity-50 p-4 rounded-lg transition duration-300 ease-in-out group-hover:text-yellow-400">
